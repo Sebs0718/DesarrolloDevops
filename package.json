@@ -1,0 +1,23 @@
+{
+  "name": "desarrollo-devops",
+  "version": "1.0.0",
+  "description": "DevOps Hub & Pipeline Simulator con CI/CD automatizado mediante GitHub Actions",
+  "main": "src/js/app.js",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/devopsUtils.test.js",
+    "lint": "node scripts/lint.js",
+    "build": "node scripts/build.js",
+    "start": "node scripts/server.js"
+  },
+  "keywords": [
+    "devops",
+    "github-actions",
+    "ci-cd",
+    "dora-metrics",
+    "testing",
+    "automation"
+  ],
+  "author": "Sebs0718",
+  "license": "MIT"
+}
