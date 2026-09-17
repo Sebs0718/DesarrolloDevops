@@ -1,11 +1,11 @@
-name: Deploy Static Site
+name: Deploy a GitHub Pages
 
 on:
   push:
     branches:
-      - main   # Se ejecuta cuando haces push a main
+      - main
+      - develop
 
-# Otorga permisos de escritura para que el action pueda subir los archivos a la rama gh-pages
 permissions:
   contents: write
 
@@ -14,11 +14,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Clonar repositorio
+      - name: 1. Clonar repositorio
         uses: actions/checkout@v4
 
-      - name: Deploy a GitHub Pages
+      - name: 2. Desplegar a GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./   # Carpeta donde está tu index.html
+          publish_dir: ./src
