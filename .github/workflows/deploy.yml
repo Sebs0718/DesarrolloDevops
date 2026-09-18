@@ -1,0 +1,65 @@
+# ==============================================================================
+# NOMBRE DEL WORKFLOW
+# Este nombre aparecerá en la pestaña "Actions" de tu repositorio en GitHub.
+# ==============================================================================
+name: Desplegar a Servidor (HTML y PHP)
+
+# ==============================================================================
+# DISPARADORES (Triggers)
+# ¿Cuándo se debe ejecutar este flujo de trabajo?
+# ==============================================================================
+on:
+  push:
+    branches:
+      - main # Se ejecuta cuando haces push a la rama principal (main)
+      - develop # Se ejecuta cuando haces push a la rama develop
+
+  # Permite ejecutar este flujo manualmente con un botón desde la web de GitHub
+  workflow_dispatch:
+
+# ==============================================================================
+# TAREAS (Jobs)
+# ==============================================================================
+jobs:
+  deploy:
+    name: Subir archivos por FTP
+
+    # Sistema operativo de la máquina virtual que enciende GitHub (Linux Ubuntu)
+    runs-on: ubuntu-latest
+
+    # ⚠️ IMPORTANTE: Aquí se conecta con el "Environment" llamado FTP que creaste
+    # en GitHub (Settings -> Secrets and variables -> Actions -> Environment: FTP)
+    environment: FTP
+
+    steps:
+      # ------------------------------------------------------------------------
+      # PASO 1: Descargar el código fuente
+      # GitHub clona los archivos de tu repositorio dentro de la máquina virtual
+      # ------------------------------------------------------------------------
+      - name: 1. Descargar codigo del repositorio
+        uses: actions/checkout@v4
+
+      # ------------------------------------------------------------------------
+      # PASO 2: Conectarse y subir los archivos por FTP
+      # Usa los secretos protegidos y transfiere tus archivos .html o .php
+      # ------------------------------------------------------------------------
+      - name: 2. Subir archivos (HTML y PHP) al servidor
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          # Servidor FTP (ej: ftpupload.net) configurado en tus Secrets
+          server: ${{ secrets.FTP_SERVER }}
+
+          # Usuario FTP (ej: if0_38123456) configurado en tus Secrets
+          username: ${{ secrets.FTP_USERNAME }}
+
+          # Contraseña del hosting configurada en tus Secrets
+          password: ${{ secrets.FTP_PASSWORD }}
+
+          # 📁 CARPETA ORIGEN: La carpeta de tu proyecto donde están tus archivos web.
+          # Si tus archivos están dentro de la carpeta "src", déjalo en "./src/".
+          # Si tus archivos están en la raíz del proyecto, cámbialo a "./".
+          local-dir: ./src/
+
+          # 🌐 CARPETA DESTINO: La carpeta pública de tu servidor de hosting.
+          # Para InfinityFree y cPanel siempre es "/htdocs/" o "/public_html/".
+          server-dir: /htdocs/
